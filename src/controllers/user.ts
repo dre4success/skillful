@@ -7,21 +7,12 @@ import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
 import { PhoneNumberFormat, PhoneNumberUtil } from 'google-libphonenumber';
-import { sign } from 'crypto';
+
+dotenv.config({ path: 'application.env' });
+import { Signup, DataStoredInToken } from '../helpers/interface';
 
 let phoneUtil = PhoneNumberUtil.getInstance();
 
-interface Signup {
-  firstname: string;
-  lastname: string;
-  email: string;
-  password: string;
-  phoneNumber: string;
-  interest: string;
-  skill: string;
-  bio: string;
-  profilePicture: string;
-}
 class User {
   userCollection: Collection = MongoHelper.table('users');
 
@@ -67,6 +58,34 @@ class User {
     let user = await this.userCollection.insertOne({ ...signup });
 
     return res.status(200).json({ status: 200, message: `User successful created` });
+  };
+
+  login = async (req: Request, res: Response) => {
+    let inputs = ['password', 'email'];
+    let err = validator(inputs, req.body);
+    if (err.length) return res.status(400).json({ status: 400, messsage: err });
+
+    const user = await this.userCollection.findOne({ email: req.body.email });
+    if (!user)
+      return res.status(401).json({ status: 401, message: `Email or Password does not exist` });
+
+    const correctPassword = await bcrypt.compare(req.body.password, user.password);
+    if (!correctPassword)
+      return res.status(401).json({
+        status: 401,
+        message: `Email or Password does not exist`,
+      });
+
+    // generate jwt
+    let dataStored: DataStoredInToken = {
+      _id: user._id,
+    };
+
+    let token = jwt.sign(dataStored, `${process.env.SECRET}`, {
+      expiresIn: '8760h',
+    });
+    let { password, ...rest } = user;
+    return res.status(200).json({ status: 200, data: { user: rest, token } });
   };
 }
 
