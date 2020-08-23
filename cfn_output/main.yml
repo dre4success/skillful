@@ -198,6 +198,7 @@ Resources:
       ManagedPolicyArns:
       - arn:aws:iam::aws:policy/CloudWatchFullAccess
       - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy
+      - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
       Tags:
       - Key: Name
         Value:
@@ -248,8 +249,9 @@ Resources:
           Fn::Sub: "#!/bin/bash -xe\napt-get update\napt-get install ec2-instance-connect\n\
             # send script output to /tmp so we can debut boot failures\nexec > /tmp/userdata.log\
             \ 2>&1\n\n# Update all packages\nsudo apt-get install -y ruby\nsudo apt-get\
-            \ install -y unzip\napt-get install -y python-setuptools\n\n# Get latest\
-            \ cfn scripts; https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-\
+            \ install -y unzip\napt-get install -y python-setuptools\nsudo apt-get\
+            \ install -y jq\nsudo snap install aws-cli --classic\n\n# Get latest cfn\
+            \ scripts; https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-\
             \ practices.html#cfninit\nmkdir -p /opt/aws/bin\napt-get update -y\napt-get\
             \ install -y python-pip\napt-get install -y python-setuptools\npython\
             \ /usr/lib/python2.7/dist-packages/easy_install.py --script-dir /opt/aws/bin\
@@ -260,9 +262,9 @@ Resources:
             \ available within the current shell\n\n        . /home/ubuntu/.bashrc\n\
             \n        # Install NPM, Node.JS\n        curl -sL https://deb.nodesource.com/setup_12.x\
             \ | sudo -E bash -\n        sudo apt-get install -y nodejs\n\n       \
-            \ # Install pm2 globally\n        npm install pm2 -g\n        \n     \
-            \   # Create log directory\n        mkdir -p /home/ubuntu/app/logs\nEOF\n\
-            \nchown ubuntu:ubuntu /tmp/install_script.sh && chmod a+x /tmp/install_script.sh\n\
+            \ # Install pm2 globally\n        sudo npm install pm2 -g\n\n        #\
+            \ Create log directory\n        mkdir -p /home/ubuntu/app/logs\nEOF\n\n\
+            chown ubuntu:ubuntu /tmp/install_script.sh && chmod a+x /tmp/install_script.sh\n\
             sleep 1; su - ubuntu -c \"/tmp/install_script.sh\"\n\n# Have CloudFormation\
             \ install any files and packages from metadata\n/opt/aws/bin/cfn-init\
             \ -v --stack ${AWS::StackName} --region ${AWS::Region} --resource Instance\n\

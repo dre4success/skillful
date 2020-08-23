@@ -255,7 +255,7 @@ Resources:
                                                 sudo apt-get install -y nodejs
 
                                                 # Install pm2 globally
-                                                npm install pm2 -g
+                                                sudo npm install pm2 -g
 
                                                 # Create log directory
                                                 mkdir -p /home/ubuntu/app/logs
