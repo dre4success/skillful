@@ -19,7 +19,7 @@ export class MongoHelper {
     return await client.connect();
   }
 
-  public static table(collection: string): Collection<any> {
+  public static table(collection: string): any {
     if (!MongoHelper.client) {
       MongoHelper.connect(`${process.env.MONGO_URI_STAGING}`)
         .then((client) => (MongoHelper.client = client))
@@ -27,6 +27,8 @@ export class MongoHelper {
           console.log('error from collection table', (error && error.message) || error);
         });
     }
-    return MongoHelper.client.db('iamskillful').collection(collection);
+    setTimeout(() => {       
+        return MongoHelper.client.db('iamskillful').collection(collection);
+    }, 7000);
   }
 }
