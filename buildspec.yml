@@ -15,7 +15,7 @@ artifacts:
   files:
     - start-service.sh
     - stop-service.sh
-    - index.js
+    - 'dist/**/*'
     - package.json
     - appspec.yml
     - 'node_modules/**/*'
