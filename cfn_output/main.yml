@@ -260,7 +260,8 @@ Resources:
             \ available within the current shell\n\n        . /home/ubuntu/.bashrc\n\
             \n        # Install NPM, Node.JS\n        curl -sL https://deb.nodesource.com/setup_12.x\
             \ | sudo -E bash -\n        sudo apt-get install -y nodejs\n\n       \
-            \ # Create log directory\n        mkdir -p /home/ubuntu/app/logs\nEOF\n\
+            \ # Install pm2 globally\n        npm install pm2 -g\n        \n     \
+            \   # Create log directory\n        mkdir -p /home/ubuntu/app/logs\nEOF\n\
             \nchown ubuntu:ubuntu /tmp/install_script.sh && chmod a+x /tmp/install_script.sh\n\
             sleep 1; su - ubuntu -c \"/tmp/install_script.sh\"\n\n# Have CloudFormation\
             \ install any files and packages from metadata\n/opt/aws/bin/cfn-init\

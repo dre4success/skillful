@@ -178,6 +178,7 @@ Resources:
                         ManagedPolicyArns:
                                 - arn:aws:iam::aws:policy/CloudWatchFullAccess
                                 - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy
+                                - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
                         Tags:
                                 - Key: Name
                                   Value: !Ref AWS::StackName
@@ -230,6 +231,8 @@ Resources:
                                         sudo apt-get install -y ruby
                                         sudo apt-get install -y unzip
                                         apt-get install -y python-setuptools
+                                        sudo apt-get install -y jq
+                                        sudo snap install aws-cli --classic
 
                                         # Get latest cfn scripts; https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best- practices.html#cfninit
                                         mkdir -p /opt/aws/bin
@@ -253,7 +256,7 @@ Resources:
 
                                                 # Install pm2 globally
                                                 npm install pm2 -g
-                                                
+
                                                 # Create log directory
                                                 mkdir -p /home/ubuntu/app/logs
                                         EOF
