@@ -189,7 +189,7 @@ Resources:
 
         Instance:
                 Type: AWS::EC2::Instance
-                DeletionPolicy: Retain
+                DeletionPolicy: Delete
                 CreationPolicy:
                         ResourceSignal:
                                 Timeout: PT5M
