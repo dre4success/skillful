@@ -27,8 +27,8 @@ export class MongoHelper {
           console.log('error from collection table', (error && error.message) || error);
         });
     }
-    setTimeout(() => {       
-        return MongoHelper.client.db('iamskillful').collection(collection);
-    }, 7000);
+
+    return MongoHelper.client.db('iamskillful').collection(collection);
+
   }
 }

@@ -14,15 +14,14 @@ import { Signup, DataStoredInToken } from '../helpers/interface';
 let phoneUtil = PhoneNumberUtil.getInstance();
 
 class User {
-  userCollection: Collection = MongoHelper.table('users');
-
   signup = async (req: Request, res: Response) => {
+    const userCollection: Collection = MongoHelper.table('users');
     let inputs = ['password', 'email', 'firstname', 'lastname', 'phoneNumber'];
     let err = validator(inputs, req.body);
     if (err.length) return res.status(400).json({ status: 400, messsage: err });
 
     // check email is unique
-    let emailExist = await this.userCollection.findOne({ email: req.body.email });
+    let emailExist = await userCollection.findOne({ email: req.body.email });
     if (emailExist) return res.status(400).json({ status: 400, message: `Email already exist` });
 
     if (!isEmail(req.body.email))
@@ -55,7 +54,7 @@ class User {
       bio: req.body.bio,
     };
 
-    let user = await this.userCollection.insertOne({ ...signup });
+    let user = await userCollection.insertOne({ ...signup });
 
     return res.status(200).json({ status: 200, message: `User successful created` });
   };
@@ -65,7 +64,8 @@ class User {
     let err = validator(inputs, req.body);
     if (err.length) return res.status(400).json({ status: 400, messsage: err });
 
-    const user = await this.userCollection.findOne({ email: req.body.email });
+    const userCollection: Collection = MongoHelper.table('users');
+    const user = await userCollection.findOne({ email: req.body.email });
     if (!user)
       return res.status(401).json({ status: 401, message: `Email or Password does not exist` });
 
