@@ -1,5 +1,5 @@
 ## base url
-http://iamskillful.dre4success.com:7657
+http://iamskillful.dre4success.com:7657/api
 
 **POST**: /signup -- sign user up
 
