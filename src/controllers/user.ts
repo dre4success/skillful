@@ -52,6 +52,7 @@ class User {
       interest: req.body.interest,
       skill: req.body.skill,
       bio: req.body.bio,
+      createdAt: new Date()
     };
 
     let user = await userCollection.insertOne({ ...signup });
@@ -104,6 +105,7 @@ class User {
       bio: req.body.bio || user.bio,
       skill: req.body.skill || user.skill,
       profilePicture: req.body.profilePicture || user.profilePicture,
+      updatedAt: new Date()
     };
 
     let updatedDoc = await userCollection.findOneAndUpdate(
