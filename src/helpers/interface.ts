@@ -10,6 +10,15 @@ export interface Signup {
   profilePicture: string;
 }
 
+export interface UpdateProfile {
+  firstname: string;
+  lastname: string;
+  interest: string;
+  bio: string;
+  skill: string;
+  profilePicture: string;
+}
+
 export interface DataStoredInToken {
   _id: string;
 }
