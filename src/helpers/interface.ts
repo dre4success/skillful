@@ -27,9 +27,9 @@ export interface DataStoredInToken {
   _id: string;
 }
 
-export interface Post {
+export interface UserPost {
   title: string;
-  body: string;
+  details: string;
   image: string;
   userID: ObjectID;
   createdAt: Date;
