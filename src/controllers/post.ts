@@ -23,10 +23,51 @@ class Post {
 
     let createdPost = await postCollection.insertOne({ ...post });
 
+    return res.status(200).json({
+      status: 200,
+      data: { post: createdPost.ops[0] },
+      message: `post successful created`,
+    });
+  };
+
+  editPost = async (req: Request, res: Response) => {
+    const postCollection: Collection = MongoHelper.table('posts');
+    let postId = req.params.id;
+    let post = await postCollection.findOne({ userID: req.user._id, _id: new ObjectId(postId) });
+    if (!post)
+      return res
+        .status(400)
+        .json({ status: 400, message: `The post you want to update does not exist` });
+
+    let editPost: UserPost = {
+      title: req.body.title || post.title,
+      details: req.body.details || post.details,
+      userID: req.user._id,
+      image: req.body.image || post.image,
+      createdAt: post.createdAt,
+      updatedAt: new Date(),
+    };
+
+    let updatedPost = await postCollection.findOneAndUpdate(
+      {
+        userID: req.user._id,
+        _id: new ObjectId(postId),
+      },
+      { $set: { ...editPost } },
+      { returnOriginal: false }
+    );
+
+    if (updatedPost.ok && updatedPost.value)
+      return res.status(200).json({
+        status: 200,
+        data: { post: updatedPost.value },
+        message: `Profile successfully updated`,
+      });
+
     return res
-      .status(200)
-      .json({ status: 200, data: { post: createdPost.ops[0] }, message: `post successful created` });
+      .status(400)
+      .json({ status: 400, message: `Unable to update your post, please try again` });
   };
 }
 
-export default Post
+export default Post;
