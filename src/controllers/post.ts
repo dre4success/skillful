@@ -87,6 +87,20 @@ class Post {
     });
     return res.status(200).json({ status: 200, data: { post: singlePost } });
   };
+
+  deletePost = async (req: Request, res: Response) => {
+    const postCollection: Collection = MongoHelper.table('posts');
+    let deletedPost = await postCollection.deleteOne({
+      userID: req.user._id,
+      _id: new ObjectId(req.params.id),
+    });
+
+    if (deletedPost.deletedCount)
+      return res.status(200).json({ status: 200, message: `Post successfully deleted` });
+    return res
+      .status(400)
+      .json({ status: 400, message: `Post doesn't exist. Probably already deleted` });
+  };
 }
 
 export default Post;
