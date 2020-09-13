@@ -44,5 +44,10 @@ http://iamskillful.dre4success.com:7657/api
 
     They are not compulsory fields, but user can update anyone of them
     
-        
-    
+**POST** /post - Create a post by user
+  - **params**:
+    - title: `String`
+    - details: `String`
+    - image: `String`
+
+    Only `title` and `details` are compulsory. You can use this endpoint `/upload/profile` to upload image and use the url returned as the value for `image`.
