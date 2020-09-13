@@ -51,3 +51,13 @@ http://iamskillful.dre4success.com:7657/api
     - image: `String`
 
     Only `title` and `details` are compulsory. You can use this endpoint `/upload/profile` to upload image and use the url returned as the value for `image`.
+
+**GET** /post - View all posts by a user
+
+**GET** /post/:id - View a single post by a user.  
+    The `:id` is the `_id` returned when you created the post or when you view all
+
+**PUT**: /post/:id - Update a particular post by the user  
+    Takes same param as when post is created
+
+**DELETE**: /post/:id - Delete a particular post by a user
