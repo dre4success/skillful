@@ -68,6 +68,16 @@ class Post {
       .status(400)
       .json({ status: 400, message: `Unable to update your post, please try again` });
   };
+
+  viewAllUsersPost = async (req: Request, res: Response) => {
+    const postCollection: Collection = MongoHelper.table('posts');
+    postCollection.createIndex({ createdAt: -1 });
+    let allPosts = await postCollection
+      .find({ userID: req.user._id })
+      .sort({ createdAt: -1 })
+      .toArray();
+    return res.status(200).json({ status: 200, data: { posts: allPosts } });
+  };
 }
 
 export default Post;
