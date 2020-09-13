@@ -78,6 +78,15 @@ class Post {
       .toArray();
     return res.status(200).json({ status: 200, data: { posts: allPosts } });
   };
+
+  viewASingleUserPost = async (req: Request, res: Response) => {
+    const postCollection: Collection = MongoHelper.table('posts');
+    let singlePost = await postCollection.findOne({
+      userID: req.user._id,
+      _id: new ObjectId(req.params.id),
+    });
+    return res.status(200).json({ status: 200, data: { post: singlePost } });
+  };
 }
 
 export default Post;
