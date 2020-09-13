@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Collection } from 'mongodb';
+import { Collection, ObjectId } from 'mongodb';
 import { MongoHelper } from '../db/mongo.helper';
 import { validator } from '../errorhandler/errorhandler';
 import isEmail from 'validator/lib/isEmail';
@@ -9,7 +9,7 @@ import * as dotenv from 'dotenv';
 import { PhoneNumberFormat, PhoneNumberUtil } from 'google-libphonenumber';
 
 dotenv.config({ path: 'application.env' });
-import { Signup, DataStoredInToken } from '../helpers/interface';
+import { Signup, DataStoredInToken, UpdateProfile } from '../helpers/interface';
 
 let phoneUtil = PhoneNumberUtil.getInstance();
 
@@ -86,6 +86,42 @@ class User {
     });
     let { password, ...rest } = user;
     return res.status(200).json({ status: 200, data: { user: rest, token } });
+  };
+
+  getALoggedInUser = async (req: Request, res: Response) => {
+    return res.status(200).json({ status: 200, data: { user: req.user } });
+  };
+
+  editProfile = async (req: Request, res: Response) => {
+    let userID = req.user._id;
+    const userCollection: Collection = MongoHelper.table('users');
+    let user = await userCollection.findOne({ _id: new ObjectId(userID) });
+
+    let updateProfile: UpdateProfile = {
+      firstname: req.body.firstname || user.firstname,
+      lastname: req.body.lastname || user.lastname,
+      interest: req.body.interest || user.interest,
+      bio: req.body.bio || user.bio,
+      skill: req.body.skill || user.skill,
+      profilePicture: req.body.profilePicture || user.profilePicture,
+    };
+
+    let updatedDoc = await userCollection.findOneAndUpdate(
+      { _id: new ObjectId(userID) },
+      { $set: { ...updateProfile } },
+      { returnOriginal: false }
+    );
+
+    if (updatedDoc.ok && updatedDoc.value)
+      return res.status(200).json({
+        status: 200,
+        data: { user: updatedDoc.value },
+        message: `Profile successfully updated`,
+      });
+
+    return res
+      .status(400)
+      .json({ status: 400, message: `Unable to update your profile, please try again` });
   };
 }
 
