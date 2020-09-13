@@ -17,6 +17,14 @@ router.route('/user').put(auth, asyncError(userController.editProfile));
 
 router.route('/upload/profile').post(asyncError(uploadController.uploadProfileImage));
 
-router.route('/post').post(auth, asyncError(postController.createPost))
+router
+  .route('/post')
+  .post(auth, asyncError(postController.createPost))
+  .get(auth, asyncError(postController.viewAllUsersPost));
+router
+  .route('/post/:id')
+  .put(auth, asyncError(postController.editPost))
+  .get(auth, asyncError(postController.viewASingleUserPost))
+  .delete(auth, asyncError(postController.deletePost));
 
 export { router };
