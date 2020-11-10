@@ -39,7 +39,15 @@ class Jobs {
 
     let createdJob = await jobCollections.insertOne(job);
 
-    return res.status(200).json({ status: 200, createdJob });
+    return res.status(200).json({ status: 200, message: `Job successfully created` });
+  };
+
+  getAllJobs = async (req: Request, res: Response) => {
+    const jobCollections: Collection = MongoHelper.table('jobs');
+
+    const jobs = await jobCollections.find({}).toArray();
+
+    return res.status(200).json({ status: 200, jobs });
   };
 }
 
