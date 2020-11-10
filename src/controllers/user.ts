@@ -16,7 +16,7 @@ let phoneUtil = PhoneNumberUtil.getInstance();
 class User {
   signup = async (req: Request, res: Response) => {
     const userCollection: Collection = MongoHelper.table('users');
-    let inputs = ['password', 'email', 'firstname', 'lastname', 'phoneNumber'];
+    let inputs = ['password', 'email', 'firstname', 'lastname', 'phoneNumber', 'type'];
     let err = validator(inputs, req.body);
     if (err.length) return res.status(400).json({ status: 400, messsage: err });
 
@@ -38,6 +38,13 @@ class User {
         .status(400)
         .json({ status: 400, message: `Not a valid phone number for ${countryCode}` });
 
+    let type = ['organisation', 'individual'];
+
+    if (!type.includes(req.body.type))
+      return res
+        .status(400)
+        .json({ status: 400, message: 'please select either organisation or individual' });
+
     let mobileNumber = phoneUtil.format(number, PhoneNumberFormat.E164);
 
     let hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -52,7 +59,8 @@ class User {
       interest: req.body.interest,
       skill: req.body.skill,
       bio: req.body.bio,
-      createdAt: new Date()
+      createdAt: new Date(),
+      type: req.body.type,
     };
 
     let user = await userCollection.insertOne({ ...signup });
@@ -105,7 +113,7 @@ class User {
       bio: req.body.bio || user.bio,
       skill: req.body.skill || user.skill,
       profilePicture: req.body.profilePicture || user.profilePicture,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     let updatedDoc = await userCollection.findOneAndUpdate(
