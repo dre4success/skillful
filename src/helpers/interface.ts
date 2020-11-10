@@ -11,6 +11,7 @@ export interface Signup {
   bio: string;
   profilePicture: string;
   createdAt: Date;
+  type: string;
 }
 
 export interface UpdateProfile {
@@ -32,6 +33,18 @@ export interface UserPost {
   details: string;
   image: string;
   userID: ObjectID;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Jobbers {
+  title: string;
+  location: string;
+  duration: string;
+  amount: string;
+  description: string;
+  organisation: ObjectID;
+  requiredSkills: Array<string>;
   createdAt: Date;
   updatedAt: Date;
 }
