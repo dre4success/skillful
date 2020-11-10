@@ -5,10 +5,12 @@ import Upload from '../controllers/upload';
 import { asyncError } from '../errorhandler/errorhandler';
 import { auth } from '../middleware/auth';
 import Post from '../controllers/post';
+import Jobs from '../controllers/jobs';
 
 let userController = new User();
 let uploadController = new Upload();
 let postController = new Post();
+let jobsController = new Jobs();
 
 router.route('/signup').post(asyncError(userController.signup));
 router.route('/login').post(asyncError(userController.login));
@@ -26,5 +28,7 @@ router
   .put(auth, asyncError(postController.editPost))
   .get(auth, asyncError(postController.viewASingleUserPost))
   .delete(auth, asyncError(postController.deletePost));
+
+router.route('/jobs').post(auth, asyncError(jobsController.createJobs));
 
 export { router };
