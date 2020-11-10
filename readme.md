@@ -14,8 +14,10 @@ http://iamskillful.dre4success.com:7657/api
     - skill: `String`
     - bio: `String`
     - profilePicture: `String`
+    - type: `String`
 
     The compulsory ones are `['password', 'email', 'firstname', 'lastname', 'phoneNumber']`
+    The value of `type` is either an `organisation` or an `individual`
 
 **POST**: /upload/profile - Upload profile image 
  - **param**:
@@ -61,3 +63,19 @@ http://iamskillful.dre4success.com:7657/api
     Takes same param as when post is created
 
 **DELETE**: /post/:id - Delete a particular post by a user
+
+**POST**: /jobs - Create jobs.  
+Only an organisation can create jobs. You have to register as an organisation
+
+- **params**:
+  - title: `string`
+  - location: `string`
+  - duration: `string`
+  - amount: `number`
+  - description: `string`
+  - requiredSkills: `Array`
+
+  The requiredSkills is an array of Skills required for job seekers to have.
+
+
+**GET**: /jobs - Fetch all jobs created to display
