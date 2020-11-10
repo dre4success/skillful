@@ -29,6 +29,9 @@ router
   .get(auth, asyncError(postController.viewASingleUserPost))
   .delete(auth, asyncError(postController.deletePost));
 
-router.route('/jobs').post(auth, asyncError(jobsController.createJobs));
+router
+  .route('/jobs')
+  .post(auth, asyncError(jobsController.createJobs))
+  .get(asyncError(jobsController.getAllJobs));
 
 export { router };
