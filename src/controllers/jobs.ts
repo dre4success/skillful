@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { Collection, ObjectId } from 'mongodb';
 import { MongoHelper } from '../db/mongo.helper';
 import { validator } from '../errorhandler/errorhandler';
-import { Jobbers } from '../helpers/interface';
+import { Jobbers, JobApplication, JobStatus, ApplicationStatus } from '../helpers/interface';
 
 // only an organisation can post jobs
 
@@ -48,6 +48,37 @@ class Jobs {
     const jobs = await jobCollections.find({}).toArray();
 
     return res.status(200).json({ status: 200, jobs });
+  };
+
+  getASingleJob = async (req: Request, res: Response) => {
+    const jobCollections: Collection = MongoHelper.table('jobs');
+    let id = req.params.id;
+    const job = await jobCollections.findOne({ _id: new ObjectId(id) });
+    return res.status(200).json({ status: 200, job });
+  };
+
+  applyForJobs = async (req: Request, res: Response) => {
+    const jobCollections: Collection = MongoHelper.table('jobs');
+    const jobApplied: Collection = MongoHelper.table('jobsappliedfor');
+
+    let jobId = req.params.id;
+    const job = await jobCollections.findOne({ _id: new ObjectId(jobId) });
+    if (!job) return res.status(200).json({ status: 200, message: `Job not found` });
+    let user = req.user._id;
+    // job being applied for
+    // user applying for job
+    // organisation with job
+    let applied: JobApplication = {
+      jobId: job._id,
+      user,
+      organisation: job.organisation,
+      dateApplied: new Date(),
+      jobStatus: JobStatus.pending,
+      applicationStatus: ApplicationStatus.reviewing,
+    };
+    let jobAppliedFor = await jobApplied.insertOne(applied);
+
+    return res.status(200).json({ status: 200, message: `Job successfully applied to` });
   };
 }
 
