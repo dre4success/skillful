@@ -78,4 +78,11 @@ Only an organisation can create jobs. You have to register as an organisation
   The requiredSkills is an array of Skills required for job seekers to have.
 
 
-**GET**: /jobs - Fetch all jobs created to display
+**GET**: /jobs - Fetch all jobs created to display them to users  
+Doesn't require an auth unless otherwise stated.
+
+**GET**: /jobs/:id - Get a single job by the job id.  
+Doesn't require an auth too.
+
+**GET**: /jobs/apply/:id - Apply for job.  
+An authenticated route. Requires a logged in user.
