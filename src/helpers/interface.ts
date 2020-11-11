@@ -48,3 +48,24 @@ export interface Jobbers {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface JobApplication {
+  jobId: ObjectID;
+  user: ObjectID;
+  organisation: ObjectID;
+  dateApplied: Date;
+  jobStatus: JobStatus;
+  applicationStatus: ApplicationStatus;
+}
+
+export enum JobStatus {
+  completed = 'completed',
+  active = 'active',
+  pending = 'pending',
+}
+
+export enum ApplicationStatus {
+  reviewing = 'reviewing',
+  accepted = 'accepted',
+  declined = 'declined',
+}
