@@ -38,4 +38,5 @@ router.route('/jobs/:id').get(asyncError(jobsController.getASingleJob));
 
 router.route('/jobs/apply/:id').get(auth, asyncError(jobsController.applyForJobs));
 
+router.route('/explore').get(auth, asyncError(postController.explore));
 export { router };
