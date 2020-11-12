@@ -101,6 +101,16 @@ class Post {
       .status(400)
       .json({ status: 400, message: `Post doesn't exist. Probably already deleted` });
   };
+
+  explore = async (req: Request, res: Response) => {
+    const postCollection: Collection = MongoHelper.table('posts');
+    let userID = req.user._id;
+    const explore = await postCollection
+      .find({ userID: { $ne: userID } })
+      .sort({ createdAt: -1 })
+      .toArray();
+    return res.status(200).json({ status: 200, explore });
+  };
 }
 
 export default Post;
