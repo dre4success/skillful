@@ -86,3 +86,8 @@ Doesn't require an auth too.
 
 **GET**: /jobs/apply/:id - Apply for job.  
 An authenticated route. Requires a logged in user.
+
+**GET**: /explore 
+An authenticated route
+
+
