@@ -45,7 +45,40 @@ class Jobs {
   getAllJobs = async (req: Request, res: Response) => {
     const jobCollections: Collection = MongoHelper.table('jobs');
 
-    const jobs = await jobCollections.find({}).toArray();
+    // const jobs = await jobCollections.find({}).toArray();
+    const jobs = await jobCollections
+      .aggregate([
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'organisation',
+            foreignField: '_id',
+            as: 'organisation',
+          },
+        },
+
+        {
+          $project: {
+            title: 1,
+            description: 1,
+            location: 1,
+            duration: 1,
+            requiredSkills: 1,
+            amount: 1,
+            organisationEmail: { $arrayElemAt: ['$organisation.email', 0] },
+            organisationProfilePic: { $arrayElemAt: ['$organisation.profilePicture', 0] },
+            organisationPhone: { $arrayElemAt: ['$organisation.phoneNumber', 0] },
+            organisationName: {
+              $concat: [
+                { $arrayElemAt: ['$organisation.firstname', 0] },
+                " ",
+                { $arrayElemAt: ['$organisation.lastname', 0] },
+              ],
+            },
+          },
+        },
+      ])
+      .toArray();
 
     return res.status(200).json({ status: 200, jobs });
   };
