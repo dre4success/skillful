@@ -8,7 +8,7 @@ import * as bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
 import { PhoneNumberFormat, PhoneNumberUtil } from 'google-libphonenumber';
 
-dotenv.config({ path: 'application.env' });
+dotenv.config({ path: 'app.env' });
 import { Signup, DataStoredInToken, UpdateProfile } from '../helpers/interface';
 
 let phoneUtil = PhoneNumberUtil.getInstance();

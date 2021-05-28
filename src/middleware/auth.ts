@@ -5,7 +5,7 @@ import { Collection, ObjectId } from 'mongodb';
 import { MongoHelper } from '../db/mongo.helper';
 import { DataStoredInToken } from '../helpers/interface';
 
-config({ path: 'application.env' });
+config({ path: 'app.env' });
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {

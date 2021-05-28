@@ -19,5 +19,5 @@ artifacts:
     - package.json
     - appspec.yml
     - 'node_modules/**/*'
-    - application.env
+    - app.env
   

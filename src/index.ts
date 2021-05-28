@@ -9,7 +9,7 @@ import { notFound, prodError } from './errorhandler/errorhandler';
 import { MongoHelper } from './db/mongo.helper';
 import { router } from './route/router';
 
-dotenv.config({ path: 'application.env' });
+dotenv.config({ path: 'app.env' });
 const port = process.env.port || 7657;
 const app = express();
 app.use(cors());

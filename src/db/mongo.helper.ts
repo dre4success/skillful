@@ -1,7 +1,7 @@
 // import * as mongo from 'mongodb'
 import { MongoClient, Collection } from 'mongodb';
 import * as dotenv from 'dotenv';
-dotenv.config({ path: 'application.env' });
+dotenv.config({ path: 'app.env' });
 
 export class MongoHelper {
   public static client: MongoClient;
